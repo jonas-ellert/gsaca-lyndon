@@ -133,7 +133,13 @@ int main(int argc, char const *argv[]) {
   }
 
   if (s.list) {
-    std::cout << "LIST MISSING" << std::endl;
+    std::cout << "gsaca_hash_ds" << std::endl;
+    std::cout << "gsaca_ds1" << std::endl;
+    std::cout << "gsaca_ds2" << std::endl;
+    std::cout << "gsaca_ds3" << std::endl;
+    std::cout << "gsaca_ds1_par" << std::endl;
+    std::cout << "gsaca_ds2_par" << std::endl;
+    std::cout << "gsaca_ds3_par" << std::endl;
     return 0;
   }
 

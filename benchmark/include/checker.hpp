@@ -5,19 +5,6 @@
 #include <vector>
 #include "common/uint_types.hpp"
 
-template <typename Array>
-inline void print_array(Array arr, size_t n, std::string name = "Array") {
-    if ( n == 0 ) {
-        std::cout << name << ": []" << std::endl;
-        return;
-    }
-    std::cout << name << ": [";
-    for (size_t i = 0; i < n-1; ++i) {
-        std::cout << arr[i] << ", ";
-    }
-    std::cout << arr[n-1] << "]" << std::endl;
-}
-
 // checker based on https://www.researchgate.net/publication/47841538_Fast_Lightweight_Suffix_Array_Construction_and_Checking
 template<typename value_type>
 struct checker_isa {
@@ -47,9 +34,6 @@ struct checker_isa {
                   << std::endl;
         return false;
     }
-
-    /*print_array(text, n, "T");
-    print_array(sa, n, "SA in ISA");*/
 
     std::cout << "\n\nChecking correctness of computed suffix array (" << name
               << ")." << std::endl;
@@ -116,6 +100,7 @@ struct checker_isa {
                     << sa[first_errors[i]] << " not unique\n"
                     << std::endl;
         }
+        delete isa;
         return false;
     }
 
@@ -140,10 +125,12 @@ struct checker_isa {
                     << sa[first_errors[i]-1] << "\n"
                     << std::endl;
         }
+        delete isa;
         return false;
     }
 
     std::cout << "The computed suffix array is CORRECT!\n" << std::endl;
+    delete isa;
     return true;
   }
 };
@@ -172,9 +159,6 @@ struct checker {
     size_t errors = 0;
     std::vector<size_t> first_errors;
     size_t const n = correct_sa.size();
-
-
-    print_array(sa, n, "SA ohne ISA");
 
     std::cout << "\n\nChecking correctness of computed suffix array (" << name
               << ")." << std::endl;

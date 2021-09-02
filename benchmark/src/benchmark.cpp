@@ -135,7 +135,16 @@ int main(int argc, char const *argv[]) {
   }
 
   if (s.list) {
-    std::cout << "LIST MISSING" << std::endl;
+    std::cout << "gsaca (by Uwe Baier)" << std::endl;
+    std::cout << "gsaca_hash_ds" << std::endl;
+    std::cout << "gsaca_ds1" << std::endl;
+    std::cout << "gsaca_ds2" << std::endl;
+    std::cout << "gsaca_ds3" << std::endl;
+    std::cout << "gsaca_ds1_par" << std::endl;
+    std::cout << "gsaca_ds2_par" << std::endl;
+    std::cout << "gsaca_ds3_par" << std::endl;
+    std::cout << "divsufsort (by Yuta Mori)" << std::endl;
+    std::cout << "divsufsort_par (by Julian Labeit)" << std::endl;
     return 0;
   }
 
@@ -149,7 +158,6 @@ int main(int argc, char const *argv[]) {
     auto const *const text = text_vec.data();
     auto const n = text_vec.size();
 
-    //checker<uint8_t> checker(text, n, s.check);
     checker_isa<uint8_t> checker(text, n, s.check);
 
     auto divsufsort_par32 = [&](uint8_t const* text, int32_t* sa, size_t n, int p) {
@@ -173,10 +181,9 @@ int main(int argc, char const *argv[]) {
             std::to_string(sizeof(sa_type) * 8); \
         if (s.matches(name_with_sa_type)) { \
           if (s.check) { \
-            sa_type * const sa = (sa_type *) malloc(n * sizeof(sa_type)); \
-            name<p1_sort,p2_sort>(text, sa, n); \
-            checker.check(sa, name_with_sa_type); \
-            delete sa; \
+            std::vector<sa_type> sa_vec(n); \
+            name<p1_sort, p2_sort>(text, sa_vec.data(), n); \
+            checker.check(sa_vec.data(), name_with_sa_type); \
           } \
           auto runner = [&](sa_type * const sa) { \
               name<p1_sort,p2_sort>(text, sa, n); \
@@ -191,10 +198,9 @@ int main(int argc, char const *argv[]) {
             std::to_string(sizeof(sa_type) * 8); \
         if (s.matches(name_with_sa_type)) { \
           if (s.check) { \
-            sa_type * const sa = (sa_type *) malloc(n * sizeof(sa_type)); \
-            name(text, sa, n); \
-            checker.check(sa, name_with_sa_type); \
-            delete sa; \
+            std::vector<sa_type> sa_vec(n); \
+            name(text, sa_vec.data(), n); \
+            checker.check(sa_vec.data(), name_with_sa_type); \
           } \
           auto runner = [&](sa_type * const sa) { \
               name(text, sa, n); \
@@ -209,10 +215,9 @@ int main(int argc, char const *argv[]) {
             std::to_string(sizeof(sa_type) * 8); \
         if (s.matches(name_with_sa_type) && s.matches_cores(p)) { \
             if (s.check) { \
-               sa_type * const sa = (sa_type *) malloc(n * sizeof(sa_type)); \
-               name(text, sa, n, p); \
-               checker.check(sa, name_with_sa_type); \
-               delete sa; \
+                std::vector<sa_type> sa_vec(n); \
+                name(text, sa_vec.data(), n, p); \
+                checker.check(sa_vec.data(), name_with_sa_type); \
             } \
             auto runner = [&](sa_type * const sa) { \
                name(text, sa, n, p); \
@@ -254,7 +259,7 @@ int main(int argc, char const *argv[]) {
     run_parallel(gsaca_ds3_par, uint40_t, text, n)
     run_parallel(gsaca_ds3_par, uint64_t, text, n)
 
-    run_parallel(divsufsort_par32, int32_t, text, n)
-    run_parallel(divsufsort_par64, int64_t, text, n)
+    run_parallel(divsufsort_par32, int32_t, text + 1, n - 1)
+    run_parallel(divsufsort_par64, int64_t, text + 1, n - 1)
   }
 }
